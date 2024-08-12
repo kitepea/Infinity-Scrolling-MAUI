@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:dx="http://schemas.devexpress.com/maui"
+    xmlns:local="clr-namespace:Infinity_Scrolling_MAUI"
+    xmlns:model="clr-namespace:Infinity_Scrolling_MAUI.Model"
+    x:Class="Infinity_Scrolling_MAUI.MainPage">
+
+    <ContentPage.BindingContext>
+        <local:MainViewModel />
+    </ContentPage.BindingContext>
+    <Grid>
+        <dx:DXCollectionView
+            ItemsSource="{Binding Blogs}"
+            IsRefreshing="{Binding IsLoading, Mode=TwoWay}"
+            IsLoadMoreEnabled="True"
+            LoadMoreCommand="{Binding LoadMoreCommand}"
+            TapCommand="{Binding OpenBlogCommand}">
+            <dx:DXCollectionView.ItemTemplate>
+                <DataTemplate
+                    x:DataType="{x:Type model:BlogPost}">
+                    <dx:DXStackLayout
+                        Orientation="Vertical"
+                        Margin="0,8,0,8">
+                        <dx:DXBorder
+                            CornerRadius="20"
+                            Margin="16,0,16,10">
+                            <dx:DXImage
+                                Source="dotnet.png"
+                                Aspect="AspectFill"
+                                HeightRequest="200" />
+                        </dx:DXBorder>
+                        <Label
+                            Text="{Binding Title}"
+                            TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray100}}"
+                            FontSize="18"
+                            MaxLines="3"
+                            LineBreakMode="WordWrap"
+                            Margin="16,0,16,10" />
+                        <Grid
+                            ColumnDefinitions="Auto,Auto,*,Auto"
+                            Margin="16,0,16,0">
+                            <dx:DXImage
+                                Source="{Binding AvatarPath}"
+                                WidthRequest="24"
+                                HeightRequest="24">
+                                <dx:DXImage.Clip>
+                                    <EllipseGeometry
+                                        RadiusX="12"
+                                        RadiusY="12"
+                                        Center="12,12" />
+                                </dx:DXImage.Clip>
+                            </dx:DXImage>
+                            <Label
+                                Text="{Binding AuthorName}"
+                                VerticalOptions="Center"
+                                TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}"
+                                Margin="5,0,0,0"
+                                Grid.Column="1" />
+                            <Label
+                                Text="{Binding PublicationDate, StringFormat=' &#8226; {0:m}'}"
+                                TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}"
+                                VerticalOptions="Center"
+                                Grid.Column="2" />
+                            <dx:DXButton
+                                BackgroundColor="Transparent"
+                                Grid.Column="3"
+                                Margin="10,0,0,0"
+                                Padding="4,0,4,0"
+                                WidthRequest="28"
+                                VerticalOptions="Center"
+                                CommandParameter="{Binding}"
+                                Command="{Binding Source={RelativeSource Mode=FindAncestorBindingContext, AncestorType={x:Type local:MainViewModel}}, Path=ShareCommand}">
+                                <dx:DXImage
+                                    Source="share"
+                                    HeightRequest="20" />
+                            </dx:DXButton>
+                        </Grid>
+                        <dx:DXBorder
+                            BackgroundColor="{AppThemeBinding Light={StaticResource Separator_Light}, Dark={StaticResource Separator_Dark}}"
+                            HeightRequest="2"
+                            BorderThickness="0"
+                            Margin="0,10,0,0" />
+                    </dx:DXStackLayout>
+                </DataTemplate>
+            </dx:DXCollectionView.ItemTemplate>
+        </dx:DXCollectionView>
+    </Grid>
+
+</ContentPage>
